@@ -1,10 +1,14 @@
 import random
 
-verbose = True
+verbose = False # Set to True for debugging information
 
 notFinished = True
+
+print()
+print("Welcome the pick-name-from-the-hat game!")
+
 while (notFinished):
-  Hat = {
+  Hat = { # The names in a hat. The key is the name and the value is the person that name cannot pick (only used in Choosers).
     'Stephen': 'Karen',
     'Karen': 'Stephen',
     'Justin': 'Sarah',
@@ -14,10 +18,11 @@ while (notFinished):
     'Jenny': 'Matthew'
   }
 
-  Choosers = dict(Hat)
+  Choosers = dict(Hat) # The players choosing names from a hat
+  Selections = dict() # Records who chose whom
 
-  Selections = dict()
 
+  print()
   print ("Placing these names into the hat:")
   counter = 1
   for name,nameCannotChoose in Hat.items():
@@ -46,10 +51,12 @@ while (notFinished):
       for chooser in Choosers:
         print(chooser)
 
+    # Chose who will draw a name from the hat
     chooser, chooserCannotChoose = random.choice(list(Choosers.items()))
 
     stillChoosing = True
     while(stillChoosing):
+      # Draw from the hat
       drawnName, drawnNameCannotChoose = random.choice(list(Hat.items()))
       print("It is " + chooser + "'s turn..." + chooser + " reaches into the hat...and draws " + drawnName + "!")
       if (chooser == drawnName):
@@ -90,6 +97,3 @@ for chooser,chosen in Selections.items():
   counter += 1
 
 print("**************************************************************")
-# for name,constraint in Hat.items():
-# print(Hat.items())
-# print(len(Hat))
