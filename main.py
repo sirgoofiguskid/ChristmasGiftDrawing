@@ -13,11 +13,10 @@ while (notFinished):
   Hat = { # The names in a hat. The key is the name and the value is the person that name cannot pick (only used in Choosers).
     'Stephen': 'Karen',
     'Karen': 'Stephen',
-    'Justin': 'Sarah',
-    'Sarah': 'Justin',
-    'Bryan': '',
-    'Matthew': 'Jenny',
-    'Jenny': 'Matthew'
+    'Deborah': 'Garrett',
+    'Garrett': 'Deborah',
+    'Kurt': 'Joyce',
+    'Joyce': 'Kurt'
   }
 
   Choosers = dict(Hat) # The players choosing names from a hat
