@@ -54,19 +54,19 @@ while (notFinished):
 
     # Chose who will draw a name from the hat
     chooser, chooserCannotChoose = random.choice(list(Choosers.items()))
-
     stillChoosing = True
     while(stillChoosing):
       # Draw from the hat
       drawnName, drawnNameCannotChoose = random.choice(list(Hat.items()))
       output += "It is " + chooser + "'s turn..." + chooser + " reaches into the hat...and draws " + drawnName + ". "
+      # output += " *** DEBUG *** " + chooser + " cannot choose " + chooserCannotChoose + " and chose " + drawnName + "\n"
       if (chooser == drawnName):
         if(i == numChoosers - 1):
           output += "And finally, " + chooser + " will have to choose " + drawnName + " which means no Christmas for " + chooser + ". Too bad for you. :(     Just kidding! Let's just start the whole thing over...\n"
           stillChoosing = False
         else:
           output += "But " + chooser + " clearly has to pick somebody else! Back in the hat."
-      elif(chooser == chooserCannotChoose):
+      elif(drawnName == chooserCannotChoose):
         if(i == numChoosers - 1):
           output += "Well that's great..." + chooser + " will have to choose " + drawnName + " which is against the rules, so " + drawnName + " won't get any presents. Bummer. :(     Just kidding! Let's just start the whole thing over...\n"
           stillChoosing = False
