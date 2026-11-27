@@ -1,34 +1,51 @@
 import sys
 import random
 from datetime import datetime
+import csv
+import argparse
+import copy
+
+parser = argparse.ArgumentParser(description='Christmas gift hat drawing')
+parser.add_argument('--namelist',
+                    help="""csv file with each line in the format of "name,(name-of-spouse)
+                    (assumed to be in the same directory as the script)"""
+                    )
+
+args = parser.parse_args()
+
+# Put the names in the hat:
+gold_hat = {}
+namelist = args.namelist
+if namelist[-4:] != '.csv':
+      namelist += '.csv'
+
+with open(namelist, mode ='r')as file:
+      csvFile = csv.reader(file)
+
+      for line in csvFile:
+            if len(line) == 1:
+              line = [line[0], '']
+            gold_hat[line[0]] = line[1]
 
 verbose = False # Set to True for debugging information
 output = "\n"
 
 notFinished = True
 
-output += "Welcome the pick-name-from-the-hat game!\n"
+output += "Welcome to the pick-name-from-the-hat game!\n"
 
 while (notFinished):
-  Hat = { # The names in a hat. The key is the name and the value is the person that name cannot pick (only used in Choosers).
-    'Stephen': 'Karen',
-    'Karen': 'Stephen',
-    'Justin': 'Sarah',
-    'Sarah': 'Justin',
-    'Bryan': '',
-    'Matthew': 'Jenny',
-    'Jenny': 'Matthew'
-  }
+  hat = copy.deepcopy(gold_hat)
 
-  Choosers = dict(Hat) # The players choosing names from a hat
+  #Create a random list of choosers
+  choosers = {k: hat[k] for k in random.sample(list(hat), len(hat))}
   Selections = dict() # Records who chose whom
-
 
   output += "\n"
   output += "Placing these names into the hat:\n"
   counter = 1
-  for name,nameCannotChoose in Hat.items():
-    if (counter == len(Hat)):
+  for name,nameCannotChoose in hat.items():
+    if (counter == len(hat)):
       prefix = "and finally, "
       suffix = "."
     else:
@@ -42,23 +59,23 @@ while (notFinished):
     counter += 1
 
   output += "\n"
-  output += "Now to pick the names!"
+  output += "Now to pick the names!\n"
 
-  numChoosers = len(Choosers)
+  numChoosers = len(choosers)
 
   for i in range (0,numChoosers): # Randomly select who choooses a name from the hat
 
     if (verbose):
       output += "Still to choose: \n"
-      for chooser in Choosers:
+      for chooser in choosers:
         output += chooser
 
     # Chose who will draw a name from the hat
-    chooser, chooserCannotChoose = random.choice(list(Choosers.items()))
+    chooser, chooserCannotChoose = random.choice(list(choosers.items()))
     stillChoosing = True
     while(stillChoosing):
       # Draw from the hat
-      drawnName, drawnNameCannotChoose = random.choice(list(Hat.items()))
+      drawnName, drawnNameCannotChoose = random.choice(list(hat.items()))
       output += "It is " + chooser + "'s turn..." + chooser + " reaches into the hat...and draws " + drawnName + ". "
       # output += " *** DEBUG *** " + chooser + " cannot choose " + chooserCannotChoose + " and chose " + drawnName + "\n"
       if (chooser == drawnName):
@@ -77,12 +94,12 @@ while (notFinished):
         output += "This is A OK!\n"
         stillChoosing = False
         Selections[chooser] = drawnName
-        del Hat[drawnName]
+        del hat[drawnName]
         if(i == numChoosers - 1):
           output += "Congratulations! We finished an entire game and didn't break any rules!\n"
           notFinished = False
         
-    del Choosers[chooser] # Make sure they don't choose again
+    del choosers[chooser] # Make sure they don't choose again
 
 output += "The final results: \n"
 output += "**************************************************************\n"
